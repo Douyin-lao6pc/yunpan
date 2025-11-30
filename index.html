@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抖音-老六说电脑的私有文件下载中心</title>
+  <!-- 配置网页图标（favicon） -->
+  <link rel="icon" href="icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="icon.ico" type="image/x-icon">
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义主题 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFFB',
+            dark: '#1D2129',
+            light: '#F2F3F5',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .backdrop-blur-xl {
+        backdrop-filter: blur(24px);
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .transition-all-300 {
+        transition: all 0.3s ease;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 全局样式 */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    /* 背景样式 */
+    .bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+    
+    .bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7);
+    }
+    
+    /* 动画效果 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .file-item {
+      transition: all 0.3s ease;
+    }
+    
+    .file-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(22, 93, 255, 0.15);
+    }
+    
+    /* 加载动画 */
+    .loader {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #165DFF;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 按钮hover效果增强 */
+    .btn-hover-effect {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-hover-effect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-hover-effect:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-dark text-light font-inter">
+  <!-- 背景容器 -->
+  <div class="bg-container">
+    <img src="background.jpg" alt="背景图片" class="bg-image" onerror="this.src='https://picsum.photos/id/1039/1920/1080';">
+  </div>
+
+  <!-- 密码验证区域 -->
+  <div id="password-section" class="min-h-screen flex items-center justify-center p-4 animate-fade-in">
+    <div class="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 transform transition-all duration-500 hover:shadow-primary/20">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-full mb-4">
+          <i class="fa fa-lock text-primary text-2xl"></i>
+        </div>
+        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-white text-shadow">抖音-老六说电脑的私有文件下载中心</h2>
+        <p class="text-gray-300 mt-2">文件带有密码保护，请输入密码</p>
+      </div>
+      
+      <form id="password-form" class="space-y-6">
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-300 mb-2">密码</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+              <i class="fa fa-key"></i>
+            </span>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              required
+              class="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-gray-400 transition-all-300"
+              placeholder="请输入密码"
+            >
+          </div>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="w-full py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all-300 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30"
+        >
+          <span>验证密码</span>
+          <i class="fa fa-arrow-right"></i>
+        </button>
+      </form>
+      
+      <div class="mt-6 text-center text-sm text-gray-400">
+        <p>© 2024-2025 lao6 OS开发团队 | 此云NAS由抖音-老六说电脑编写</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文件下载区域 (默认隐藏) -->
+  <div id="download-section" class="min-h-screen p-4 pt-16 pb-24 hidden">
+    <div class="max-w-5xl mx-auto">
+      <!-- 顶部功能按钮区 -->
+      <div class="flex justify-start mb-8 animate-fade-in" style="animation-delay: 0.05s;">
+        <div class="flex gap-3">
+          <!-- 管理文件按钮 -->
+          <button 
+            id="manage-files-btn" 
+            class="btn-hover-effect flex items-center gap-2 px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-secondary border border-secondary/30 rounded-lg shadow-md"
+          >
+            <i class="fa fa-cog"></i>
+            <span>管理文件</span>
+          </button>
+          
+          <!-- 锁定按钮 -->
+          <button 
+            id="lock-btn" 
+            class="btn-hover-effect flex items-center gap-2 px-4 py-2 bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30 rounded-lg shadow-md"
+          >
+            <i class="fa fa-lock"></i>
+            <span>锁定</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- 头部 -->
+      <div class="text-center mb-12 animate-fade-in" style="animation-delay: 0.1s;">
+        <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-white text-shadow mb-2">可用下载文件</h2>
+        <p class="text-gray-300 max-w-2xl mx-auto">以下是可用的.zip格式文件，点击即可开始下载，服务器已经设置指定设备的下载权限</p>
+      </div>
+      
+      <!-- 文件列表容器 -->
+      <div id="file-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 文件项将通过JavaScript动态生成 -->
+        <div class="col-span-full text-center py-12" id="loading-indicator">
+          <div class="loader mx-auto mb-4"></div>
+          <p class="text-gray-300">正在加载文件列表...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 正确密码
+    const CORRECT_PASSWORD = 'douyinlao6pc';
+    // 标记是否在文件列表页面
+    let isInDownloadSection = false;
+    
+    // DOM元素
+    const passwordForm = document.getElementById('password-form');
+    const passwordSection = document.getElementById('password-section');
+    const downloadSection = document.getElementById('download-section');
+    const fileList = document.getElementById('file-list');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const manageFilesBtn = document.getElementById('manage-files-btn');
+    const lockBtn = document.getElementById('lock-btn');
+    
+    // 密码验证表单提交事件
+    passwordForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const passwordInput = document.getElementById('password');
+      const enteredPassword = passwordInput.value.trim();
+      
+      if (enteredPassword === CORRECT_PASSWORD) {
+        // 密码正确，切换到下载区域
+        passwordSection.classList.add('opacity-0');
+        setTimeout(() => {
+          passwordSection.classList.add('hidden');
+          downloadSection.classList.remove('hidden');
+          // 标记当前在文件列表页面
+          isInDownloadSection = true;
+          // 重置密码输入框
+          passwordInput.value = '';
+          setTimeout(() => {
+            downloadSection.classList.add('opacity-100');
+          }, 50);
+          
+          // 加载文件列表
+          loadFileList();
+        }, 300);
+      } else {
+        // 密码错误，显示提示
+        passwordInput.classList.add('border-red-500');
+        setTimeout(() => {
+          passwordInput.classList.remove('border-red-500');
+        }, 1000);
+        
+        // 显示浏览器消息框
+        alert('密码错误，请重新输入！');
+        passwordInput.focus();
+      }
+    });
+    
+    // 模拟加载文件列表（实际项目中应从服务器获取）
+    function loadFileList() {
+      // 模拟网络请求延迟
+      setTimeout(() => {
+        // 清空加载指示器
+        loadingIndicator.remove();
+        
+        // 示例.zip文件列表（实际应从服务器获取目录下的.zip文件）
+        const zipFiles = [
+          { name: '运动会剪辑.zip', size: '16.1 MB', date: '2025-11-28' },
+          { name: '运动会照片.zip', size: '248 MB', date: '2025-11-27' },
+          { name: 'lao6浏览器源代码.zip', size: '1.56 GB', date: '2025-11-26' },
+          { name: '测试数据文件.zip', size: '524.8 MB', date: '2025-11-25' },
+          { name: 'lao6 OS-202601更新测试包.zip', size: '1.60 GB', date: '2025-11-24' },
+          { name: '团队扩展描述资料.zip', size: '9.2 MB', date: '2025-11-23' }
+        ];
+        
+        // 生成文件项HTML
+        zipFiles.forEach((file, index) => {
+          const fileItem = document.createElement('div');
+          fileItem.className = 'file-item bg-white/10 backdrop-blur-xl rounded-xl p-6 border border-white/20 animate-fade-in';
+          fileItem.style.animationDelay = `${index * 0.1}s`;
+          
+          // 下载链接添加 target="_blank" 实现新标签页下载
+          fileItem.innerHTML = `
+            <div class="flex items-start">
+              <div class="w-12 h-12 flex items-center justify-center bg-primary/20 rounded-lg mr-4 flex-shrink-0">
+                <i class="fa fa-file-zip-o text-primary text-xl"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <a href="${file.name}" download target="_blank" class="font-semibold text-white truncate hover:text-primary transition-colors">
+                  ${file.name}
+                </a>
+                <div class="flex items-center mt-2 text-sm text-gray-400 space-x-4">
+                  <span class="flex items-center">
+                    <i class="fa fa-hdd-o mr-1"></i> ${file.size}
+                  </span>
+                  <span class="flex items-center">
+                    <i class="fa fa-calendar-o mr-1"></i> ${file.date}
+                  </span>
+                </div>
+              </div>
+              <a href="${file.name}" download target="_blank" class="ml-4 w-10 h-10 flex items-center justify-center bg-primary hover:bg-primary/90 rounded-lg transition-all-300">
+                <i class="fa fa-download text-white"></i>
+              </a>
+            </div>
+          `;
+          
+          fileList.appendChild(fileItem);
+        });
+      }, 1500);
+    }
+    
+    // 管理文件按钮点击事件
+    manageFilesBtn.addEventListener('click', function() {
+      // 显示提示信息
+      alert('温馨提示：即将离开本网站，跳转到GitHub，记得开启Watt Toolkit加速器');
+      // 在新标签页打开GitHub
+      window.open('https://github.com/Douyin-lao6pc/yunpan', '_blank');
+    });
+    
+    // 锁定按钮点击事件
+    lockBtn.addEventListener('click', function() {
+      // 切换回密码验证区域，更新状态标记
+      isInDownloadSection = false;
+      downloadSection.classList.add('opacity-0');
+      setTimeout(() => {
+        downloadSection.classList.add('hidden');
+        passwordSection.classList.remove('hidden');
+        setTimeout(() => {
+          passwordSection.classList.add('opacity-100');
+          // 聚焦到密码输入框
+          document.getElementById('password').focus();
+        }, 50);
+        
+        // 重置文件列表（重新加载时会重新生成）
+        fileList.innerHTML = `
+          <div class="col-span-full text-center py-12" id="loading-indicator">
+            <div class="loader mx-auto mb-4"></div>
+            <p class="text-gray-300">正在加载文件列表...</p>
+          </div>
+        `;
+      }, 300);
+    });
+    
+    // 关闭页面确认提示（仅在文件列表页面生效）
+    window.addEventListener('beforeunload', function(e) {
+      if (isInDownloadSection) {
+        // 自定义提示信息（不同浏览器显示效果可能略有差异）
+        const message = '您的工作可能未完成，是否确认离开此页面？';
+        e.returnValue = message;
+        return message;
+      }
+      // 不在文件列表页面时，不显示提示
+      return undefined;
+    });
+    
+    // 处理背景图片加载失败
+    document.querySelector('.bg-image').addEventListener('error', function() {
+      this.style.objectFit = 'cover';
+      this.style.width = '100%';
+      this.style.height = '100%';
+    });
+  </script>
+</body>
+</html>
